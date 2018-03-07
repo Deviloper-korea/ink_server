@@ -29,8 +29,12 @@ router.post('/', (req, res) => {
 	},
 	(callback) => {
 		pool.getConnection((err, connection) => {
-			if(err) callback("connection error : " + err, null);
+			if(err){
+				callback("connection error : " + err, null);
+				connection.release();
+		}
 			else callback(null, connection);
+
 		});
 	},
 	(connection, callback) => {
@@ -45,6 +49,7 @@ router.post('/', (req, res) => {
 				callback("mysql proc error ", null);
 			}else{
 				callback(null, userData);
+				connection.release();
 			}
 		});
 	},
@@ -55,6 +60,7 @@ router.post('/', (req, res) => {
 				stat: "login failll"
 			});
 			callback("login failll", null);
+
 		}else{
 			console.log("zzz" + userData[0]);
 			callback(null, userData);
@@ -62,8 +68,10 @@ router.post('/', (req, res) => {
 	},
 	(userData, callback) => {
 		crypto.pbkdf2(pwd, userData[0].salt, 100000, 64, 'sha512', (err, hashed) => {
-			if(err) callback("hashing error : ");
-			else callback(null, userData, hashed.toString('base64'));
+			if(err){
+				callback("hashing error : ");
+
+		}else callback(null, userData, hashed.toString('base64'));
 		});
 	},
 	(userData, hashed, callback) => {
@@ -89,6 +97,7 @@ router.post('/', (req, res) => {
 		stat: "login fail"
 	});
 	callback("login fail", null);
+
 }
 }
 ];
