@@ -23,7 +23,6 @@ router.post('/', (req,res) => {
 		selectIndex: 'SELECT bulletin_id, bulletin_date, bulletin_good_count, bulletin_ink, user_id, bulletin_text, topic_text '+
 		'FROM bulletin WHERE (bulletin_id = ? )'
 	};
-	console.log("fjfjfj");
 	let taskArray = [
 	(callback) =>{
 		console.log(req.session.user_id);
@@ -37,6 +36,7 @@ router.post('/', (req,res) => {
 		}
 	},
 	(callback) => {
+
 		pool.getConnection((err, connection) => {
 			if(err){
 				res.status(500).send({
@@ -53,6 +53,7 @@ router.post('/', (req,res) => {
 		let updateink = "select * from users where user_id=?";
 		connection.query(updateink, [req.session.user_id], (err, rows) => {
 			if(err){
+				console.log("!!!!");
 				connection.release();
 				res.status(501).send({
 					stat: "101"
@@ -72,6 +73,7 @@ router.post('/', (req,res) => {
 		});
 	},
 	(connection, callback) => {
+		console.log("update");
 		let updateink = "update users set ink =ink-? where user_id=?;";
 		connection.query(updateink, [req.body.bulletin_ink,req.session.user_id], (err, rows) => {
 			if(err){
