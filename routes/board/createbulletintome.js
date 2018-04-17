@@ -11,7 +11,7 @@ router.post('/', (req,res) => {
     let user_id = req.session.user_id;
     let bulletin_text = req.body.bulletin_text;
     let topic_text = req.body.topic_text;
-    let bulletin_ink=req.body.bulletin_ink;
+//    let bulletin_ink=req.body.bulletin_ink;
     //let dt = new Date();
     //let bulletin_date = now.toFormat('YYYY-MM-DD HH24:MI:SS');
     var now = moment();
@@ -92,7 +92,7 @@ router.post('/', (req,res) => {
         },
         (connection, callback) => {
             let insertQuery = query.insertQuery;
-            connection.query(insertQuery, [bulletin_date, bulletin_ink,user_id, bulletin_text, topic_text], (err, row) => {
+            connection.query(insertQuery, [bulletin_date, 0,user_id, bulletin_text, topic_text], (err, row) => {
                 if(err){
                     res.status(500).send({
                         stat: "fail"
