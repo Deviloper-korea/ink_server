@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
   		});
   	},
     (connection, callback) => {
-      let selectMyWriteQuery = "SELECT * FROM bulletin where user_id=?";
+      let selectMyWriteQuery = "SELECT * FROM bulletin where user_id=? order by bulletin_id desc";
   		connection.query(selectMyWriteQuery,req.session.user_id,(err, rows) => {
   			if(err){
           res.status(500).send({
